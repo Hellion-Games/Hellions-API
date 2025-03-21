@@ -22,15 +22,15 @@ public class HellionsAPIEntityRegistry {
     private final Map<ResourceLocation, EntityTypeDataHolder> ENTITY_TYPE_REGISTRY = new HashMap<>();
 
     /*
-     public static final HellionsAPIEntityHolder ENTITY_TYPE_MODULE = new HellionsAPIEntityHolder("examplemod");
+     public static final HellionsAPIEntityRegistry ENTITY_TYPE_MODULE = new HellionsAPIEntityRegistry("examplemod");
 
-     public static final EntityTypeDataHolder<ExampleEntity> EXAMPLE = ENTITY_TYPE_MODULE.register("example", EntityTypeDataHolder.of(() ->
+     public static final EntityTypeDataHolder EXAMPLE = ENTITY_TYPE_MODULE.register("example", EntityTypeDataHolder.of(() ->
                     EntityTypeDataHolder.Builder.of(ExampleEntity::new, MobCategory.CREATURE)
                             .sized(1.0f, 3.0f)
                             .build()
             )
             .attributes(ExampleEntity::createExampleEntityAttributes));
-    */
+     */
 
     public EntityTypeDataHolder register(String name, EntityTypeDataHolder entityTypeDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
