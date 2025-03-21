@@ -22,13 +22,14 @@ public class HellionsAPIItemRegistry {
     private final Map<ResourceLocation, ItemDataHolder<?>> ITEM_REGISTRY = new HashMap<>();
 
     /*
-    public static final HellionsAPIItemHolder ITEM_MODULE = new HellionsAPIItemHolder("examplemod");
+    public static final HellionsAPIItemRegistry ITEM_MODULE = new HellionsAPIItemRegistry("examplemod");
 
-    public static final ItemDataHolder<Item> EXAMPLE_ITEM = ITEM_MODULE.register("example_item", ItemDataHolder.of(() ->
-            ItemDataHolder.Builder.of(ExampleItem::new, new Item.Properties().stacksTo(16))
-                    .build()
-    ));
-    */
+    public static final ItemDataHolder<?> EXAMPLE_ITEM = ITEM_MODULE.register("example_item", ItemDataHolder.of(() ->
+                    new Item(new Item.Properties()))
+            .withModel(ModelTemplates.FLAT_ITEM)
+            .withTranslation("Example Item")
+    );
+     */
 
     public ItemDataHolder<?> register(String name, ItemDataHolder<?> itemDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
