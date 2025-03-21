@@ -8,15 +8,20 @@ import com.helliongames.hellionsapi.registration.registries.HellionsAPIBlockRegi
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIEffectRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIItemRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -65,17 +70,18 @@ public class RegistryModuleNeoForge {
             for (HellionsAPIEffectRegistry module : HellionsAPIEffectRegistry.getModules()) {
                 for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
                     // Register effect
-                    event.register(Registries.MOB_EFFECT, entry.getKey(), entry.getValue()::get);
+                    Registry.register(BuiltInRegistries.MOB_EFFECT, entry.getKey(), entry.getValue().get());
 
                     if (entry.getValue().hasPotion()) {
                         String id = entry.getKey().getPath();
+                        String namespace = entry.getKey().getNamespace();
 
-                        event.register(Registries.POTION, entry.getKey(), () ->
-                                new Potion(new MobEffectInstance(entry.getValue().get(), 3600)));
-                        event.register(Registries.POTION, IECommon.id("long_" + id), () ->
-                                new Potion(id, new MobEffectInstance(entry.getValue().get(), 9600)));
-                        event.register(Registries.POTION, IECommon.id("strong_" + id), () ->
-                                new Potion(id, new MobEffectInstance(entry.getValue().get(), 1800, 1)));
+                        event.register(Registries.POTION, entry.getKey(),
+                                () -> new Potion(new MobEffectInstance(Holder.direct(entry.getValue().get()), 3600)));
+                        event.register(Registries.POTION, ResourceLocation.fromNamespaceAndPath(namespace, "long_" + id),
+                                () -> new Potion(id, new MobEffectInstance(Holder.direct(entry.getValue().get()), 9600)));
+                        event.register(Registries.POTION, ResourceLocation.fromNamespaceAndPath(namespace, "strong_" + id),
+                                () -> new Potion(id, new MobEffectInstance(Holder.direct(entry.getValue().get()), 1800, 1)));
                     }
                 }
             }

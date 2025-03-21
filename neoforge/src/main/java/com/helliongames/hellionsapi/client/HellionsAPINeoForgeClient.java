@@ -1,7 +1,7 @@
 package com.helliongames.hellionsapi.client;
 
+import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRendererRegistry;
-import com.helliongames.hellionsapi.registration.EntityTypeDataHolder;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;

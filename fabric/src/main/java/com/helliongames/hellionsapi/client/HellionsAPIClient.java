@@ -1,6 +1,6 @@
 package com.helliongames.hellionsapi.client;
 
-import com.helliongames.hellionsapi.registration.EntityTypeDataHolder;
+import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;

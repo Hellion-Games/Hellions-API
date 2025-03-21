@@ -2,6 +2,8 @@ package com.helliongames.hellionsapi.module;
 
 import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIEffectRegistry;
+import net.fabricmc.fabric.mixin.content.registry.BrewingRecipeRegistryBuilderMixin;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -22,17 +24,20 @@ public class EffectModuleFabric {
 
                 if (entry.getValue().hasPotion()) {
                     String id = entry.getKey().getPath();
+                    String namespace = entry.getKey().getNamespace();
 
                     Potion base = Registry.register(BuiltInRegistries.POTION, entry.getKey(),
-                            new Potion(new MobEffectInstance(entry.getValue().get(), 3600)));
-                    Potion long_ = Registry.register(BuiltInRegistries.POTION, IECommon.id("long_" + id),
-                            new Potion(id, new MobEffectInstance(entry.getValue().get(), 9600)));
-                    Potion strong = Registry.register(BuiltInRegistries.POTION, IECommon.id("strong_" + id),
-                            new Potion(id, new MobEffectInstance(entry.getValue().get(), 1800, 1)));
+                            new Potion(new MobEffectInstance(Holder.direct(entry.getValue().get()), 3600)));
+                    Potion longPotion = Registry.register(BuiltInRegistries.POTION, ResourceLocation.fromNamespaceAndPath(namespace, "long_" + id),
+                            new Potion(id, new MobEffectInstance(Holder.direct(entry.getValue().get()), 9600)));
+                    Potion strong = Registry.register(BuiltInRegistries.POTION, ResourceLocation.fromNamespaceAndPath(namespace, "strong_" + id),
+                            new Potion(id, new MobEffectInstance(Holder.direct(entry.getValue().get()), 1800, 1)));
 
-                    PotionBrewing.addMix(Potions.AWKWARD, entry.getValue().getPotionIngredient().get(), base);
-                    PotionBrewing.addMix(base, Items.REDSTONE, long_);
-                    PotionBrewing.addMix(base, Items.GLOWSTONE_DUST, strong);
+                    BrewingRecipeRegistryBuilderMixin.BUILD.register(builder -> {
+                        builder.addMix(Potions.AWKWARD, entry.getValue().getPotionIngredient().get(), Holder.direct(base));
+                        builder.addMix(Holder.direct(base), Items.REDSTONE, Holder.direct(longPotion));
+                        builder.addMix(Holder.direct(base), Items.GLOWSTONE_DUST, Holder.direct(strong));
+                    });
                 }
             }
         }
