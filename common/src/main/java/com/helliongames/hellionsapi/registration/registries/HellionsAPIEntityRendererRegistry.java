@@ -1,12 +1,12 @@
-package com.helliongames.hellionsapi.holders;
+package com.helliongames.hellionsapi.registration.registries;
 
-import com.helliongames.hellionsapi.registration.EntityTypeDataHolder;
+import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class HellionsAPIEntityRendererHolder {
+public class HellionsAPIEntityRendererRegistry {
     /** Map of all EntityTypes to their EntityRendererProviders. */
     private static final Map<EntityTypeDataHolder, EntityRendererProvider> ENTITY_RENDERER_REGISTRY = new HashMap<>();
 

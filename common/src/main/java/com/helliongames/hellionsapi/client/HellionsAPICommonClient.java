@@ -1,9 +1,9 @@
 package com.helliongames.hellionsapi.client;
 
-import com.helliongames.hellionsapi.holders.HellionsAPIEntityRendererHolder;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRendererRegistry;
 
 public class HellionsAPICommonClient {
     public static void init() {
-        HellionsAPIEntityRendererHolder.loadClass();
+        HellionsAPIEntityRendererRegistry.loadClass();
     }
 }

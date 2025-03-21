@@ -2,6 +2,9 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
 }
+base {
+    archivesName = "${mod_name}-fabric-${minecraft_version}"
+}
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.layered {
@@ -10,6 +13,13 @@ dependencies {
     }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+}
+
+fabricApi {
+    configureDataGeneration {
+        modId = "hellionsapi"
+        outputDirectory = file("${project(':common').projectDir.path}/src/main/generated")
+    }
 }
 
 loom {
@@ -34,4 +44,20 @@ loom {
             runDir('runs/server')
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source(project(":common").sourceSets.main.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+    source(project(":common").sourceSets.main.allJava)
+}
+tasks.named("sourcesJar", Jar) {
+    duplicatesStrategy = 'include'
+    from(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    duplicatesStrategy = 'include'
+    from project(":common").sourceSets.main.resources
 }

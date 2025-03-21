@@ -5,7 +5,16 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BlockBehaviourAccessor"
+    "BlockBehaviourAccessor",
+    "accessor.BlockBehaviourAccessor",
+    "accessor.ButtonBlockAccessor",
+    "accessor.DoorBlockAccessor",
+    "accessor.IronBarsBlockAccessor",
+    "accessor.PressurePlateBlockAccessor",
+    "accessor.StairBlockAccessor",
+    "accessor.TorchBlockAccessor",
+    "accessor.TrapDoorBlockAccessor",
+    "accessor.WallTorchBlockAccessor"
   ],
   "client": [
   ],

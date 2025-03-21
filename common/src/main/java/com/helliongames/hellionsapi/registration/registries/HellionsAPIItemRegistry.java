@@ -1,6 +1,6 @@
-package com.helliongames.hellionsapi.holders;
+package com.helliongames.hellionsapi.registration.registries;
 
-import com.helliongames.hellionsapi.registration.ItemDataHolder;
+import com.helliongames.hellionsapi.registration.holders.ItemDataHolder;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HellionsAPIItemHolder {
-    private static final List<HellionsAPIItemHolder> MODULES = new ArrayList<>();
+public class HellionsAPIItemRegistry {
+    private static final List<HellionsAPIItemRegistry> MODULES = new ArrayList<>();
 
     private final String modid;
 
-    public HellionsAPIItemHolder(String modid) {
+    public HellionsAPIItemRegistry(String modid) {
         this.modid = modid;
         MODULES.add(this);
     }
@@ -40,7 +40,7 @@ public class HellionsAPIItemHolder {
         return this.ITEM_REGISTRY;
     }
 
-    public static List<HellionsAPIItemHolder> getModules() {
+    public static List<HellionsAPIItemRegistry> getModules() {
         return MODULES;
     }
 }

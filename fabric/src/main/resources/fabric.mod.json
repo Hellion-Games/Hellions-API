@@ -20,6 +20,9 @@
         ],
         "client": [
             "com.helliongames.hellionsapi.client.HellionsAPIClient"
+        ],
+        "fabric-datagen": [
+          "com.helliongames.hellionsapi.datagen.HellionsAPIDataGenerator"
         ]
     },
     "mixins": [

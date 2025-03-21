@@ -1,15 +1,19 @@
 package com.helliongames.hellionsapi.module;
 
-import com.helliongames.hellionsapi.holders.HellionsAPIBlockHolder;
-import com.helliongames.hellionsapi.holders.HellionsAPIEntityHolder;
-import com.helliongames.hellionsapi.holders.HellionsAPIItemHolder;
-import com.helliongames.hellionsapi.registration.BlockDataHolder;
-import com.helliongames.hellionsapi.registration.EntityTypeDataHolder;
-import com.helliongames.hellionsapi.registration.ItemDataHolder;
+import com.helliongames.hellionsapi.registration.holders.BlockDataHolder;
+import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
+import com.helliongames.hellionsapi.registration.holders.ItemDataHolder;
+import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIBlockRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIEffectRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIItemRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.alchemy.Potion;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -23,9 +27,8 @@ public class RegistryModuleNeoForge {
 
     @SubscribeEvent
     public static void registerValues(RegisterEvent event) {
-
         if (event.getRegistry().equals(BuiltInRegistries.ENTITY_TYPE)) {
-            for (HellionsAPIEntityHolder module : HellionsAPIEntityHolder.getModules()) {
+            for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
                 for (Map.Entry<ResourceLocation, EntityTypeDataHolder> entry : module.getEntityTypeRegistry().entrySet()) {
                     // Register entity type
                     event.register(Registries.ENTITY_TYPE, entityTypeRegisterHelper ->
@@ -34,7 +37,7 @@ public class RegistryModuleNeoForge {
                 }
             }
         } else if (event.getRegistry().equals(BuiltInRegistries.ITEM)) {
-            for (HellionsAPIItemHolder module : HellionsAPIItemHolder.getModules()) {
+            for (HellionsAPIItemRegistry module : HellionsAPIItemRegistry.getModules()) {
                 for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getItemRegistry().entrySet()) {
                     // Register item
                     event.register(Registries.ITEM, itemRegistryHelper ->
@@ -43,7 +46,7 @@ public class RegistryModuleNeoForge {
                 }
             }
         } else if (event.getRegistry().equals(BuiltInRegistries.BLOCK)) {
-            for (HellionsAPIBlockHolder module : HellionsAPIBlockHolder.getModules()) {
+            for (HellionsAPIBlockRegistry module : HellionsAPIBlockRegistry.getModules()) {
                 for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getBlockRegistry().entrySet()) {
                     // Register block
                     event.register(Registries.BLOCK, blockRegistryHelper ->
@@ -58,13 +61,30 @@ public class RegistryModuleNeoForge {
                     }
                 }
             }
-        }
+        } else if (event.getRegistry().equals(BuiltInRegistries.MOB_EFFECT)) {
+            for (HellionsAPIEffectRegistry module : HellionsAPIEffectRegistry.getModules()) {
+                for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
+                    // Register effect
+                    event.register(Registries.MOB_EFFECT, entry.getKey(), entry.getValue()::get);
 
+                    if (entry.getValue().hasPotion()) {
+                        String id = entry.getKey().getPath();
+
+                        event.register(Registries.POTION, entry.getKey(), () ->
+                                new Potion(new MobEffectInstance(entry.getValue().get(), 3600)));
+                        event.register(Registries.POTION, IECommon.id("long_" + id), () ->
+                                new Potion(id, new MobEffectInstance(entry.getValue().get(), 9600)));
+                        event.register(Registries.POTION, IECommon.id("strong_" + id), () ->
+                                new Potion(id, new MobEffectInstance(entry.getValue().get(), 1800, 1)));
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-        for (HellionsAPIEntityHolder module : HellionsAPIEntityHolder.getModules()) {
+        for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
             for (Map.Entry<ResourceLocation, EntityTypeDataHolder> entry : module.getEntityTypeRegistry().entrySet()) {
                 // Register entity attributes
 
