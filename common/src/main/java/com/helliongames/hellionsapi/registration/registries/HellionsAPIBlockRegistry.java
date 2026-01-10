@@ -33,7 +33,7 @@ public class HellionsAPIBlockRegistry {
     );
     */
 
-    public BlockDataHolder<? extends Block> register(String name, BlockDataHolder<? extends Block> blockDataHolder) {
+    public <T extends Block> BlockDataHolder<T> register(String name, BlockDataHolder<T> blockDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
         this.BLOCK_REGISTRY.put(id, blockDataHolder);
         return blockDataHolder;

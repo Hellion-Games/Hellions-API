@@ -24,7 +24,7 @@ public class EntityTypeDataHolder<T extends Entity> {
         this.entrySupplier = entrySupplier;
     }
 
-    public static <U extends Entity> EntityTypeDataHolder<U> of(Supplier<EntityType<U>> entityTypeSupplier) {
+    public static <E extends Entity> EntityTypeDataHolder<E> of(Supplier<EntityType<E>> entityTypeSupplier) {
         return new EntityTypeDataHolder<>(entityTypeSupplier);
     }
 

@@ -5,6 +5,7 @@ import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRen
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Entity;
 
 import java.util.Map;
 
@@ -16,9 +17,7 @@ public class HellionsAPIClient implements ClientModInitializer {
     }
 
     private void registerEntityRenderers() {
-        for (Map.Entry<EntityTypeDataHolder, EntityRendererProvider> entry : HellionsAPIEntityRendererRegistry.getEntityRendererRegistry().entrySet()) {
-            // Register entity renderers
-            EntityRendererRegistry.register(entry.getKey().get(), entry.getValue());
-        }
+        HellionsAPIEntityRendererRegistry.forEachEntry(entry -> EntityRendererRegistry.register(entry.getHolder().get(), entry.getProvider()));
     }
+
 }

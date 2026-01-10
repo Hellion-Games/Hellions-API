@@ -2,6 +2,7 @@ package com.helliongames.hellionsapi.registration.registries;
 
 import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class HellionsAPIEntityRegistry {
     }
 
     /** Map of all EntityType Resource Locations to their EntityTypeDataHolders. */
-    private final Map<ResourceLocation, EntityTypeDataHolder> ENTITY_TYPE_REGISTRY = new HashMap<>();
+    private final Map<ResourceLocation, EntityTypeDataHolder<? extends Entity>> ENTITY_TYPE_REGISTRY = new HashMap<>();
 
     /*
      public static final HellionsAPIEntityRegistry ENTITY_TYPE_MODULE = new HellionsAPIEntityRegistry("examplemod");
@@ -32,13 +33,13 @@ public class HellionsAPIEntityRegistry {
             .attributes(ExampleEntity::createExampleEntityAttributes));
      */
 
-    public EntityTypeDataHolder register(String name, EntityTypeDataHolder entityTypeDataHolder) {
+    public <T extends Entity> EntityTypeDataHolder<T> register(String name, EntityTypeDataHolder<T> entityTypeDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
         this.ENTITY_TYPE_REGISTRY.put(id, entityTypeDataHolder);
         return entityTypeDataHolder;
     }
 
-    public Map<ResourceLocation, EntityTypeDataHolder> getEntityTypeRegistry() {
+    public Map<ResourceLocation, EntityTypeDataHolder<? extends Entity>> getEntityTypeRegistry() {
         return this.ENTITY_TYPE_REGISTRY;
     }
 

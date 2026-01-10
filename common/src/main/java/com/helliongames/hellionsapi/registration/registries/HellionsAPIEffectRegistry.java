@@ -2,6 +2,7 @@ package com.helliongames.hellionsapi.registration.registries;
 
 import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class HellionsAPIEffectRegistry {
     /** Map of all Effect Resource Locations to their Suppliers. */
     private final Map<ResourceLocation, MobEffectDataHolder<?>> EFFECT_REGISTRY = new HashMap<>();
 
-    public MobEffectDataHolder<?> register(String name, MobEffectDataHolder<?> effect) {
+    public <T extends MobEffect> MobEffectDataHolder<T> register(String name, MobEffectDataHolder<T> effect) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
         this.EFFECT_REGISTRY.put(id, effect);
         return effect;

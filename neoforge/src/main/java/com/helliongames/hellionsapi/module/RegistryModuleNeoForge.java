@@ -14,6 +14,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -34,7 +37,7 @@ public class RegistryModuleNeoForge {
     public static void registerValues(RegisterEvent event) {
         if (event.getRegistry().equals(BuiltInRegistries.ENTITY_TYPE)) {
             for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, EntityTypeDataHolder> entry : module.getEntityTypeRegistry().entrySet()) {
+                for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
                     // Register entity type
                     event.register(Registries.ENTITY_TYPE, entityTypeRegisterHelper ->
                             entityTypeRegisterHelper.register(entry.getKey(), entry.getValue().get())
@@ -91,7 +94,7 @@ public class RegistryModuleNeoForge {
     @SubscribeEvent
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
         for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
-            for (Map.Entry<ResourceLocation, EntityTypeDataHolder> entry : module.getEntityTypeRegistry().entrySet()) {
+            for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
                 // Register entity attributes
 
                 AttributeSupplier.Builder builder = (AttributeSupplier.Builder) entry.getValue().getAttributesSupplier().get();
@@ -99,7 +102,7 @@ public class RegistryModuleNeoForge {
                 builder.add(NeoForgeMod.SWIM_SPEED)
                         .add(NeoForgeMod.NAMETAG_DISTANCE);
 
-                event.put(entry.getValue().get(), builder.build());
+                event.put((EntityType<? extends LivingEntity>) entry.getValue().get(), builder.build());
             }
         }
     }

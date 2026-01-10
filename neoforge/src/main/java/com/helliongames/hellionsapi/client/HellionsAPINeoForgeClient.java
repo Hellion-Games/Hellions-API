@@ -21,9 +21,6 @@ public class HellionsAPINeoForgeClient {
     }
 
     private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        for (Map.Entry<EntityTypeDataHolder, EntityRendererProvider> entry : HellionsAPIEntityRendererRegistry.getEntityRendererRegistry().entrySet()) {
-            // Register entity renderers
-            event.registerEntityRenderer(entry.getKey().get(), entry.getValue());
-        }
+        HellionsAPIEntityRendererRegistry.forEachEntry(entry -> event.registerEntityRenderer(entry.getHolder().get(), entry.getProvider()));
     }
 }

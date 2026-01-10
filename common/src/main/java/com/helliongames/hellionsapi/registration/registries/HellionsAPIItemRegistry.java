@@ -2,6 +2,7 @@ package com.helliongames.hellionsapi.registration.registries;
 
 import com.helliongames.hellionsapi.registration.holders.ItemDataHolder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class HellionsAPIItemRegistry {
     );
      */
 
-    public ItemDataHolder<?> register(String name, ItemDataHolder<?> itemDataHolder) {
+    public <T extends Item> ItemDataHolder<T> register(String name, ItemDataHolder<T> itemDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
         this.ITEM_REGISTRY.put(id, itemDataHolder);
         return itemDataHolder;
