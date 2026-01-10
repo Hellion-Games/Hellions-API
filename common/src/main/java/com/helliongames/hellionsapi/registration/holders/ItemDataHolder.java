@@ -25,8 +25,8 @@ public class ItemDataHolder<T extends Item> {
         this.entrySupplier = entrySupplier;
     }
 
-    public static ItemDataHolder<? extends Item> of(Supplier<? extends Item> itemSupplier) {
-        return new ItemDataHolder(itemSupplier);
+    public static <I extends Item> ItemDataHolder<I> of(Supplier<I> itemSupplier) {
+        return new ItemDataHolder<>(itemSupplier);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ItemDataHolder<T extends Item> {
      * Registers the item as a fuel source
      * @param fuelDuration the length in ticks this fuel source burns
      */
-    public ItemDataHolder<?> withFuel(int fuelDuration) {
+    public ItemDataHolder<T> withFuel(int fuelDuration) {
         this.fuelDuration = fuelDuration;
         return this;
     }
@@ -64,7 +64,7 @@ public class ItemDataHolder<T extends Item> {
      * @param tags the tag keys to register the item to
      */
     @SafeVarargs
-    public final ItemDataHolder<?> withTags(TagKey<Item>... tags) {
+    public final ItemDataHolder<T> withTags(TagKey<Item>... tags) {
         for (TagKey<Item> tag : tags) {
             ITEM_TAGS.putIfAbsent(tag, new ArrayList<>());
             ITEM_TAGS.get(tag).add(this);
@@ -80,7 +80,7 @@ public class ItemDataHolder<T extends Item> {
     /**
      * The model type of this item for datagen
      */
-    public ItemDataHolder<?> withModel(ModelTemplate model) {
+    public ItemDataHolder<T> withModel(ModelTemplate model) {
         this.model = model;
         return this;
     }
@@ -97,7 +97,7 @@ public class ItemDataHolder<T extends Item> {
      * Sets the default EN_US translation for this item
      * @param translation the name for this item
      */
-    public ItemDataHolder<?> withTranslation(String translation) {
+    public ItemDataHolder<T> withTranslation(String translation) {
         this.defaultTranslation = translation;
         return this;
     }

@@ -55,8 +55,8 @@ public class BlockDataHolder<T extends Block> {
         this.entrySupplier = entrySupplier;
     }
 
-    public static BlockDataHolder<? extends Block> of(Supplier<?> blockSupplier) {
-        return new BlockDataHolder(blockSupplier);
+    public static <U extends Block> BlockDataHolder<U> of(Supplier<U> blockSupplier) {
+        return new BlockDataHolder<>(blockSupplier);
     }
 
     /**
@@ -75,7 +75,7 @@ public class BlockDataHolder<T extends Block> {
     /**
      * Creates a default BlockItem for this block
      */
-    public BlockDataHolder<? extends Block> withItem() {
+    public BlockDataHolder<T> withItem() {
         this.blockItem = ItemDataHolder.of(() -> new BlockItem(this.get(), new Item.Properties())).withModel(ModelTemplates.FLAT_ITEM);
         return this;
     }
@@ -84,7 +84,7 @@ public class BlockDataHolder<T extends Block> {
      * Adds the ability to strip this block with an axe
      * @param stripResult the block to set it to when it gets stripped
      */
-    public BlockDataHolder<?> withStripping(Block stripResult) {
+    public BlockDataHolder<T> withStripping(Block stripResult) {
         this.strippingResult = stripResult;
         return this;
     }
@@ -101,7 +101,7 @@ public class BlockDataHolder<T extends Block> {
      * Registers flammability with Vanilla Fire
      * @param flammabilityEntry an Entry of the ignite and spread chances
      */
-    public BlockDataHolder<?> withFlammableDefault(FlammabilityRegistry.Entry flammabilityEntry) {
+    public BlockDataHolder<T> withFlammableDefault(FlammabilityRegistry.Entry flammabilityEntry) {
         return this.withFlammable(Blocks.FIRE, flammabilityEntry);
     }
 
@@ -111,7 +111,7 @@ public class BlockDataHolder<T extends Block> {
      * @param fireBlock must extend FireBlock
      * @param flammabilityEntry an Entry of the ignite and spread chances
      */
-    public BlockDataHolder<?> withFlammable(Block fireBlock, FlammabilityRegistry.Entry flammabilityEntry) {
+    public BlockDataHolder<T> withFlammable(Block fireBlock, FlammabilityRegistry.Entry flammabilityEntry) {
         this.FLAMMABILITIES.put(fireBlock, flammabilityEntry);
         return this;
     }
@@ -124,7 +124,7 @@ public class BlockDataHolder<T extends Block> {
      * Registers the block item as a fuel source. Does nothing if the block has no item.
      * @param fuelDuration the length in ticks this fuel source burns
      */
-    public BlockDataHolder<?> withFuel(int fuelDuration) {
+    public BlockDataHolder<T> withFuel(int fuelDuration) {
         this.fuelDuration = fuelDuration;
         return this;
     }
@@ -142,7 +142,7 @@ public class BlockDataHolder<T extends Block> {
      * @param tags the tag keys to register the block to
      */
     @SafeVarargs
-    public final BlockDataHolder<?> withTags(TagKey<Block>... tags) {
+    public final BlockDataHolder<T> withTags(TagKey<Block>... tags) {
         for (TagKey<Block> tag : tags) {
             BLOCK_TAGS.putIfAbsent(tag, new ArrayList<>());
             BLOCK_TAGS.get(tag).add(this);
@@ -161,7 +161,7 @@ public class BlockDataHolder<T extends Block> {
         return this.blockItem != null;
     }
 
-    public ItemDataHolder<?> getBlockItem() {
+    public ItemDataHolder<? extends Item> getBlockItem() {
         return this.blockItem;
     }
 
@@ -169,7 +169,7 @@ public class BlockDataHolder<T extends Block> {
      * The model type of this block for datagen
      * If any of the blocksets are added to this block, this value will be ignored and CUBE will be used
      */
-    public BlockDataHolder<?> withModel(Model model) {
+    public BlockDataHolder<T> withModel(Model model) {
         this.model = model;
         return this;
     }
@@ -185,7 +185,7 @@ public class BlockDataHolder<T extends Block> {
     /**
      * Sets the rendertype of this block to cutout, allowing for transparency
      */
-    public BlockDataHolder<?> cutout() {
+    public BlockDataHolder<T> cutout() {
         CUTOUT_BLOCKS.add(this);
         return this;
     }
@@ -197,7 +197,7 @@ public class BlockDataHolder<T extends Block> {
     /**
      * Makes this a glass block with a glass pane
      */
-    public BlockDataHolder<?> glass() {
+    public BlockDataHolder<T> glass() {
         this.isGlass = true;
         this.paneBlock = BlockDataHolder.of(() -> IronBarsBlockAccessor.createIronBarsBlock(BlockBehaviour.Properties.ofFullCopy(this.get()))).cutout().withItem();
         return this;
@@ -207,7 +207,7 @@ public class BlockDataHolder<T extends Block> {
      * Makes this a colored glass block with a glass pane
      * @param dye DyeColor to make the pane
      */
-    public BlockDataHolder<?> glass(DyeColor dye) {
+    public BlockDataHolder<T> glass(DyeColor dye) {
         this.isGlass = true;
         this.paneBlock = BlockDataHolder.of(() -> new StainedGlassPaneBlock(dye, BlockBehaviour.Properties.ofFullCopy(this.get()))).cutout().withItem();
         return this;
@@ -225,7 +225,7 @@ public class BlockDataHolder<T extends Block> {
      * Sets the default EN_US translation for this block
      * @param translation the name for this block
      */
-    public BlockDataHolder<?> withTranslation(String translation) {
+    public BlockDataHolder<T> withTranslation(String translation) {
         this.defaultTranslation = translation;
         return this;
     }
@@ -250,37 +250,37 @@ public class BlockDataHolder<T extends Block> {
         return this.dropCount;
     }
 
-    public BlockDataHolder<?> dropsSelf() {
+    public BlockDataHolder<T> dropsSelf() {
         this.drop = this::get;
         this.dropCount = ConstantValue.exactly(1);
         return this;
     }
 
-    public BlockDataHolder<?> dropsSelf(int count) {
+    public BlockDataHolder<T> dropsSelf(int count) {
         this.drop = this::get;
         this.dropCount = ConstantValue.exactly(count);
         return this;
     }
 
-    public final BlockDataHolder<?> dropsOther(Supplier<ItemLike> drop) {
+    public final BlockDataHolder<T> dropsOther(Supplier<ItemLike> drop) {
         this.drop = drop;
         this.dropCount = ConstantValue.exactly(1);
         return this;
     }
 
-    public final BlockDataHolder<?> dropsOther(Supplier<ItemLike> drop, int count) {
+    public final BlockDataHolder<T> dropsOther(Supplier<ItemLike> drop, int count) {
         this.drop = drop;
         this.dropCount = ConstantValue.exactly(count);
         return this;
     }
 
-    public final BlockDataHolder<?> dropsOther(Supplier<ItemLike> drop, NumberProvider count) {
+    public final BlockDataHolder<T> dropsOther(Supplier<ItemLike> drop, NumberProvider count) {
         this.drop = drop;
         this.dropCount = count;
         return this;
     }
 
-    public BlockDataHolder<?> dropsWithSilk() {
+    public BlockDataHolder<T> dropsWithSilk() {
         this.drop = this::get;
         this.dropCount = null;
         return this;
@@ -290,7 +290,7 @@ public class BlockDataHolder<T extends Block> {
         return this.drop != null;
     }
 
-    public BlockDataHolder<?> withStairs() {
+    public BlockDataHolder<T> withStairs() {
         BlockDataHolder<?> stairs = BlockDataHolder.of(() -> StairBlockAccessor.createStairBlock(this.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.STAIRS)
                 .withItem()
@@ -303,7 +303,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.STAIRS);
     }
 
-    public BlockDataHolder<?> withSlab() {
+    public BlockDataHolder<T> withSlab() {
         BlockDataHolder<?> slab = BlockDataHolder.of(() -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.SLAB)
                 .withItem()
@@ -316,7 +316,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.SLAB);
     }
 
-    public BlockDataHolder<?> withWall() {
+    public BlockDataHolder<T> withWall() {
         BlockDataHolder<?> wall = BlockDataHolder.of(() -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.WALL)
                 .withItem()
@@ -329,7 +329,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.WALL);
     }
 
-    public BlockDataHolder<?> withButton(BlockSetType type, int ticksPressed, boolean arrowCanPress) {
+    public BlockDataHolder<T> withButton(BlockSetType type, int ticksPressed, boolean arrowCanPress) {
         BlockDataHolder<?> button = BlockDataHolder.of(() -> ButtonBlockAccessor.createButtonBlock(type, ticksPressed, BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.BUTTON)
                 .withItem()
@@ -342,7 +342,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.BUTTON);
     }
 
-    public BlockDataHolder<?> withPressurePlate(BlockSetType type) {
+    public BlockDataHolder<T> withPressurePlate(BlockSetType type) {
         BlockDataHolder<?> pressurePlate = BlockDataHolder.of(() -> PressurePlateBlockAccessor.createPressurePlateBlock(type, BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.PRESSURE_PLATE)
                 .withItem()
@@ -355,7 +355,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.PRESSURE_PLATE);
     }
 
-    public BlockDataHolder<?> withFence() {
+    public BlockDataHolder<T> withFence() {
         BlockDataHolder<?> fence = BlockDataHolder.of(() -> new FenceBlock(BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.FENCE)
                 .withItem()
@@ -368,7 +368,7 @@ public class BlockDataHolder<T extends Block> {
         return this.BLOCKSETS.get(Model.FENCE);
     }
 
-    public BlockDataHolder<?> withFenceGate(WoodType woodType) {
+    public BlockDataHolder<T> withFenceGate(WoodType woodType) {
         BlockDataHolder<?> fenceGate = BlockDataHolder.of(() -> new FenceGateBlock(woodType, BlockBehaviour.Properties.ofFullCopy(this.get())))
                 .withModel(Model.FENCE_GATE)
                 .withItem()

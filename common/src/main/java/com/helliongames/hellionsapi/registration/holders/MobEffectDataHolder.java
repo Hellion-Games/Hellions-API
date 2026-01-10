@@ -36,7 +36,7 @@ public class MobEffectDataHolder<T extends MobEffect> {
      * Sets the default EN_US translation for this item
      * @param translation the name for this item
      */
-    public MobEffectDataHolder<?> withTranslation(String translation) {
+    public MobEffectDataHolder<T> withTranslation(String translation) {
         this.defaultTranslation = translation;
         return this;
     }
@@ -49,7 +49,7 @@ public class MobEffectDataHolder<T extends MobEffect> {
         return this.defaultTranslation;
     }
 
-    public MobEffectDataHolder<?> withPotion(Supplier<Item> ingredient) {
+    public MobEffectDataHolder<T> withPotion(Supplier<Item> ingredient) {
         this.potionIngredient = ingredient;
         return this;
     }

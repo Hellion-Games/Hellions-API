@@ -95,9 +95,10 @@ public class RegistryModuleNeoForge {
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
         for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
             for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
-                // Register entity attributes
+                if (!entry.getValue().hasAttributes()) continue;
 
-                AttributeSupplier.Builder builder = (AttributeSupplier.Builder) entry.getValue().getAttributesSupplier().get();
+                // Register entity attributes
+                AttributeSupplier.Builder builder = entry.getValue().getAttributesSupplier().get();
                 // Attach required Forge attributes and register
                 builder.add(NeoForgeMod.SWIM_SPEED)
                         .add(NeoForgeMod.NAMETAG_DISTANCE);
