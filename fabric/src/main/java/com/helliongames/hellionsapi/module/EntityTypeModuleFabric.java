@@ -17,6 +17,7 @@ public class EntityTypeModuleFabric {
 
     public static void registerEntities(String modid) {
         HellionsAPIEntityRegistry module = HellionsAPIEntityRegistry.getModule(modid);
+        if (module == null) return;
         for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
             // Register entity type
             Registry.register(BuiltInRegistries.ENTITY_TYPE, entry.getKey(), entry.getValue().get());

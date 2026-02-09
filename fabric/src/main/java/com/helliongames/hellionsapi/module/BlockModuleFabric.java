@@ -16,6 +16,7 @@ public class BlockModuleFabric {
 
     public static void registerBlocks(String modid) {
         HellionsAPIBlockRegistry module = HellionsAPIBlockRegistry.getModule(modid);
+        if (module == null) return;
         for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getBlockRegistry().entrySet()) {
             // Register block
             Registry.register(BuiltInRegistries.BLOCK, entry.getKey(), entry.getValue().get());

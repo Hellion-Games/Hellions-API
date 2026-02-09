@@ -18,6 +18,7 @@ import java.util.Map;
 public class EffectModuleFabric {
     public static void registerEffects(String modid) {
         HellionsAPIEffectRegistry module = HellionsAPIEffectRegistry.getModule(modid);
+        if (module == null) return;
         for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
             // Register effect
             Registry.register(BuiltInRegistries.MOB_EFFECT, entry.getKey(), entry.getValue().get());

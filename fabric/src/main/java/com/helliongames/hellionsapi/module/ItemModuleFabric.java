@@ -13,6 +13,7 @@ public class ItemModuleFabric {
 
     public static void registerItems(String modid) {
         HellionsAPIItemRegistry module = HellionsAPIItemRegistry.getModule(modid);
+        if (module == null) return;
         for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getItemRegistry().entrySet()) {
             // Register item
             Registry.register(BuiltInRegistries.ITEM, entry.getKey(), entry.getValue().get());
