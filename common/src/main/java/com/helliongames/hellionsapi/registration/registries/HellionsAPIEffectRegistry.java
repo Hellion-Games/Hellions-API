@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class HellionsAPIEffectRegistry {
-    private static final List<HellionsAPIEffectRegistry> MODULES = new ArrayList<>();
+    private static final Map<String, HellionsAPIEffectRegistry> MODULES = new HashMap<>();
 
     private final String modid;
 
     public HellionsAPIEffectRegistry(String modid) {
         this.modid = modid;
-        MODULES.add(this);
+        MODULES.put(modid, this);
     }
 
     /** Map of all Effect Resource Locations to their Suppliers. */
@@ -32,7 +32,11 @@ public class HellionsAPIEffectRegistry {
         return this.EFFECT_REGISTRY;
     }
 
-    public static List<HellionsAPIEffectRegistry> getModules() {
+    public static Map<String, HellionsAPIEffectRegistry> getModules() {
         return MODULES;
+    }
+
+    public static HellionsAPIEffectRegistry getModule(String modid) {
+        return MODULES.get(modid);
     }
 }

@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class HellionsAPIEntityRegistry {
-    private static final List<HellionsAPIEntityRegistry> MODULES = new ArrayList<>();
+    private static final Map<String, HellionsAPIEntityRegistry> MODULES = new HashMap<>();
 
     private final String modid;
 
     public HellionsAPIEntityRegistry(String modid) {
         this.modid = modid;
-        MODULES.add(this);
+        MODULES.put(modid, this);
     }
 
     /** Map of all EntityType Resource Locations to their EntityTypeDataHolders. */
@@ -43,7 +43,11 @@ public class HellionsAPIEntityRegistry {
         return this.ENTITY_TYPE_REGISTRY;
     }
 
-    public static List<HellionsAPIEntityRegistry> getModules() {
+    public static Map<String, HellionsAPIEntityRegistry> getModules() {
         return MODULES;
+    }
+
+    public static HellionsAPIEntityRegistry getModule(String modid) {
+        return MODULES.get(modid);
     }
 }

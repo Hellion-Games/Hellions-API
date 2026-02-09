@@ -10,8 +10,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 public class HellionsAPI {
 
     public HellionsAPI(IEventBus eventBus) {
-        HellionsAPICommon.init();
-
         if (FMLEnvironment.dist.isClient()) {
             HellionsAPINeoForgeClient.init(eventBus);
         }

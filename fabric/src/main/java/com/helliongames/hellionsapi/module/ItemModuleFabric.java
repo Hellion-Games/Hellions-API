@@ -11,16 +11,15 @@ import java.util.Map;
 
 public class ItemModuleFabric {
 
-    public static void registerItems() {
-        for (HellionsAPIItemRegistry module : HellionsAPIItemRegistry.getModules()) {
-            for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getItemRegistry().entrySet()) {
-                // Register item
-                Registry.register(BuiltInRegistries.ITEM, entry.getKey(), entry.getValue().get());
+    public static void registerItems(String modid) {
+        HellionsAPIItemRegistry module = HellionsAPIItemRegistry.getModule(modid);
+        for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getItemRegistry().entrySet()) {
+            // Register item
+            Registry.register(BuiltInRegistries.ITEM, entry.getKey(), entry.getValue().get());
 
-                // Register Fuel
-                if (entry.getValue().isFuel()) {
-                    FuelRegistry.register(entry.getValue().get(), entry.getValue().getFuelDuration());
-                }
+            // Register Fuel
+            if (entry.getValue().isFuel()) {
+                FuelRegistry.register(entry.getValue().get(), entry.getValue().getFuelDuration());
             }
         }
     }

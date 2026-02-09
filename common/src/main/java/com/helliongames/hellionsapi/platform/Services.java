@@ -2,12 +2,14 @@ package com.helliongames.hellionsapi.platform;
 
 import com.helliongames.hellionsapi.HellionsAPIConstants;
 import com.helliongames.hellionsapi.platform.services.IPlatformHelper;
+import com.helliongames.hellionsapi.platform.services.IRegistryHelper;
 
 import java.util.ServiceLoader;
 
 public class Services {
 
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
+    public static final IRegistryHelper REGISTRY = load(IRegistryHelper.class);
 
     public static <T> T load(Class<T> clazz) {
 

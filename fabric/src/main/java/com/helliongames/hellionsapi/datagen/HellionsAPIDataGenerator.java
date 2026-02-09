@@ -68,8 +68,8 @@ public class HellionsAPIDataGenerator implements DataGeneratorEntrypoint {
         @Override
         public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder builder) {
             // This handles all supplied block and item entries automatically
-            for (HellionsAPIBlockRegistry module : HellionsAPIBlockRegistry.getModules()) {
-                for (BlockDataHolder<?> blockDataHolder : module.getBlockRegistry().values()) {
+            for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
+                for (BlockDataHolder<?> blockDataHolder : module.getValue().getBlockRegistry().values()) {
                     if (blockDataHolder.hasTranslation()) {
                         builder.add(blockDataHolder.get(), blockDataHolder.getTranslation());
                     }
@@ -86,16 +86,16 @@ public class HellionsAPIDataGenerator implements DataGeneratorEntrypoint {
                 }
             }
 
-            for (HellionsAPIItemRegistry module : HellionsAPIItemRegistry.getModules()) {
-                for (ItemDataHolder<?> itemDataHolder : module.getItemRegistry().values()) {
+            for (Map.Entry<String, HellionsAPIItemRegistry> module : HellionsAPIItemRegistry.getModules().entrySet()) {
+                for (ItemDataHolder<?> itemDataHolder : module.getValue().getItemRegistry().values()) {
                     if (itemDataHolder.hasTranslation()) {
                         builder.add(itemDataHolder.get(), itemDataHolder.getTranslation());
                     }
                 }
             }
 
-            for (HellionsAPIEffectRegistry module : HellionsAPIEffectRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
+            for (Map.Entry<String, HellionsAPIEffectRegistry> module : HellionsAPIEffectRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getValue().getEffectRegistry().entrySet()) {
                     if (entry.getValue().hasTranslation()) {
                         builder.add(entry.getValue().get(), entry.getValue().getTranslation());
 
@@ -149,8 +149,8 @@ public class HellionsAPIDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generate() {
-            for (HellionsAPIBlockRegistry module : HellionsAPIBlockRegistry.getModules()) {
-                for (BlockDataHolder<?> blockDataHolder : module.getBlockRegistry().values()) {
+            for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
+                for (BlockDataHolder<?> blockDataHolder : module.getValue().getBlockRegistry().values()) {
                     for (BlockDataHolder<?> blocksetHolder : blockDataHolder.getBlocksets().values()) {
                         if (blocksetHolder.hasModel()) {
                             if (Objects.requireNonNull(blockDataHolder.getModel()) == BlockDataHolder.Model.SLAB) {
@@ -207,8 +207,8 @@ public class HellionsAPIDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generateBlockStateModels(BlockModelGenerators generator) {
-            for (HellionsAPIBlockRegistry module : HellionsAPIBlockRegistry.getModules()) {
-                for (BlockDataHolder<?> blockDataHolder : module.getBlockRegistry().values()) {
+            for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
+                for (BlockDataHolder<?> blockDataHolder : module.getValue().getBlockRegistry().values()) {
                     if (blockDataHolder.getBlocksets().isEmpty()) {
 
                         if (blockDataHolder.isGlass()) {
@@ -247,8 +247,8 @@ public class HellionsAPIDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generateItemModels(ItemModelGenerators generator) {
-            for (HellionsAPIItemRegistry module : HellionsAPIItemRegistry.getModules()) {
-                for (ItemDataHolder<?> itemDataHolder : module.getItemRegistry().values()) {
+            for (Map.Entry<String, HellionsAPIItemRegistry> module : HellionsAPIItemRegistry.getModules().entrySet()) {
+                for (ItemDataHolder<?> itemDataHolder : module.getValue().getItemRegistry().values()) {
                     if (itemDataHolder.hasModel()) {
                         generator.generateFlatItem(itemDataHolder.get(), itemDataHolder.getModel());
                     }

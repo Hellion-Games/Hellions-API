@@ -36,8 +36,8 @@ public class RegistryModuleNeoForge {
     @SubscribeEvent
     public static void registerValues(RegisterEvent event) {
         if (event.getRegistry().equals(BuiltInRegistries.ENTITY_TYPE)) {
-            for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
+            for (Map.Entry<String, HellionsAPIEntityRegistry> module : HellionsAPIEntityRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getValue().getEntityTypeRegistry().entrySet()) {
                     // Register entity type
                     event.register(Registries.ENTITY_TYPE, entityTypeRegisterHelper ->
                             entityTypeRegisterHelper.register(entry.getKey(), entry.getValue().get())
@@ -45,8 +45,8 @@ public class RegistryModuleNeoForge {
                 }
             }
         } else if (event.getRegistry().equals(BuiltInRegistries.ITEM)) {
-            for (HellionsAPIItemRegistry module : HellionsAPIItemRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getItemRegistry().entrySet()) {
+            for (Map.Entry<String, HellionsAPIItemRegistry> module : HellionsAPIItemRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getValue().getItemRegistry().entrySet()) {
                     // Register item
                     event.register(Registries.ITEM, itemRegistryHelper ->
                             itemRegistryHelper.register(entry.getKey(), entry.getValue().get())
@@ -54,8 +54,8 @@ public class RegistryModuleNeoForge {
                 }
             }
         } else if (event.getRegistry().equals(BuiltInRegistries.BLOCK)) {
-            for (HellionsAPIBlockRegistry module : HellionsAPIBlockRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getBlockRegistry().entrySet()) {
+            for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getValue().getBlockRegistry().entrySet()) {
                     // Register block
                     event.register(Registries.BLOCK, blockRegistryHelper ->
                             blockRegistryHelper.register(entry.getKey(), entry.getValue().get())
@@ -70,8 +70,8 @@ public class RegistryModuleNeoForge {
                 }
             }
         } else if (event.getRegistry().equals(BuiltInRegistries.MOB_EFFECT)) {
-            for (HellionsAPIEffectRegistry module : HellionsAPIEffectRegistry.getModules()) {
-                for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
+            for (Map.Entry<String, HellionsAPIEffectRegistry> module : HellionsAPIEffectRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getValue().getEffectRegistry().entrySet()) {
                     // Register effect
                     Registry.register(BuiltInRegistries.MOB_EFFECT, entry.getKey(), entry.getValue().get());
 
@@ -93,8 +93,8 @@ public class RegistryModuleNeoForge {
 
     @SubscribeEvent
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-        for (HellionsAPIEntityRegistry module : HellionsAPIEntityRegistry.getModules()) {
-            for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getEntityTypeRegistry().entrySet()) {
+        for (Map.Entry<String, HellionsAPIEntityRegistry> module : HellionsAPIEntityRegistry.getModules().entrySet()) {
+            for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getValue().getEntityTypeRegistry().entrySet()) {
                 if (!entry.getValue().hasAttributes()) continue;
 
                 // Register entity attributes

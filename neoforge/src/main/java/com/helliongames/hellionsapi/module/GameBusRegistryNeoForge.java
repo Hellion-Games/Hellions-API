@@ -19,8 +19,8 @@ public class GameBusRegistryNeoForge {
 
     @SubscribeEvent
     public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-        for (HellionsAPIEffectRegistry module : HellionsAPIEffectRegistry.getModules()) {
-            for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getEffectRegistry().entrySet()) {
+        for (Map.Entry<String, HellionsAPIEffectRegistry> module : HellionsAPIEffectRegistry.getModules().entrySet()) {
+            for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getValue().getEffectRegistry().entrySet()) {
                 if (entry.getValue().hasPotion()) {
                     String id = entry.getKey().getPath();
                     String namespace = entry.getKey().getNamespace();

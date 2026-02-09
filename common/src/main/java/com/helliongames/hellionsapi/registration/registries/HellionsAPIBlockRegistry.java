@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class HellionsAPIBlockRegistry {
-    private static final List<HellionsAPIBlockRegistry> MODULES = new ArrayList<>();
+    private static final Map<String, HellionsAPIBlockRegistry> MODULES = new HashMap<>();
 
     private final String modid;
 
     public HellionsAPIBlockRegistry(String modid) {
         this.modid = modid;
-        MODULES.add(this);
+        MODULES.put(modid,this);
     }
 
     /** Map of all Block Resource Locations to their BlockDataHolders. */
@@ -43,7 +43,11 @@ public class HellionsAPIBlockRegistry {
         return this.BLOCK_REGISTRY;
     }
 
-    public static List<HellionsAPIBlockRegistry> getModules() {
+    public static Map<String, HellionsAPIBlockRegistry> getModules() {
         return MODULES;
+    }
+
+    public static HellionsAPIBlockRegistry getModule(String modid) {
+        return MODULES.get(modid);
     }
 }

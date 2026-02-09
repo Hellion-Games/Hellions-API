@@ -7,14 +7,7 @@ import com.helliongames.hellionsapi.module.ItemModuleFabric;
 import net.fabricmc.api.ModInitializer;
 
 public class HellionsAPI implements ModInitializer {
-    
     @Override
     public void onInitialize() {
-        HellionsAPICommon.init();
-
-        BlockModuleFabric.registerBlocks();
-        ItemModuleFabric.registerItems();
-        EntityTypeModuleFabric.registerEntities();
-        EffectModuleFabric.registerEffects();
     }
 }
