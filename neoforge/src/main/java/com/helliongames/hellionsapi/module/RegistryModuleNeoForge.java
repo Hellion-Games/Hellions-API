@@ -1,30 +1,22 @@
 package com.helliongames.hellionsapi.module;
 
-import com.helliongames.hellionsapi.registration.holders.BlockDataHolder;
-import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
-import com.helliongames.hellionsapi.registration.holders.ItemDataHolder;
-import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIBlockRegistry;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIEffectRegistry;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRegistry;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIItemRegistry;
+import com.helliongames.hellionsapi.registration.holders.*;
+import com.helliongames.hellionsapi.registration.registries.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -86,6 +78,17 @@ public class RegistryModuleNeoForge {
                         event.register(Registries.POTION, ResourceLocation.fromNamespaceAndPath(namespace, "strong_" + id),
                                 () -> new Potion(id, new MobEffectInstance(Holder.direct(entry.getValue().get()), 1800, 1)));
                     }
+                }
+            }
+        } else if (event.getRegistry().equals(BuiltInRegistries.SOUND_EVENT)) {
+            for (Map.Entry<String, HellionsAPISoundRegistry> module : HellionsAPISoundRegistry.getModules().entrySet()) {
+                for (Map.Entry<ResourceLocation, SoundDataHolder> entry : module.getValue().getSoundRegistry().entrySet()) {
+                    // Register sound
+                    SoundEvent soundEvent = entry.getValue().hasRange() ?
+                            SoundEvent.createFixedRangeEvent(entry.getKey(), entry.getValue().getRange()) :
+                            SoundEvent.createVariableRangeEvent(entry.getKey());
+
+                    Registry.register(BuiltInRegistries.SOUND_EVENT, entry.getKey(), soundEvent);
                 }
             }
         }
