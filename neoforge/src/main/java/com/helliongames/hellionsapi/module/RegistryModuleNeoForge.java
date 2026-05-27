@@ -105,6 +105,14 @@ public class RegistryModuleNeoForge {
                             HellionsLootModifier.CODEC
                     )
             );
+        } else if (event.getRegistry().equals(Registries.ARMOR_MATERIAL)) {
+            event.register(Registries.ARMOR_MATERIAL, helper -> {
+                for (HellionsAPIArmorMaterialRegistry module : HellionsAPIArmorMaterialRegistry.getModules().values()) {
+                    for (Map.Entry<ResourceLocation, ArmorMaterialDataHolder> entry : module.getArmorMaterialRegistry().entrySet()) {
+                        helper.register(entry.getKey(), entry.getValue().get());
+                    }
+                }
+            });
         }
     }
 

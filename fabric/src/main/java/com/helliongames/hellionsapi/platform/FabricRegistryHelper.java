@@ -6,6 +6,7 @@ import com.helliongames.hellionsapi.platform.services.IRegistryHelper;
 public class FabricRegistryHelper implements IRegistryHelper {
     @Override
     public void registerMod(String modid) {
+        ArmorMaterialModuleFabric.registerArmorMaterials(modid);
         BlockModuleFabric.registerBlocks(modid);
         ItemModuleFabric.registerItems(modid);
         EntityTypeModuleFabric.registerEntities(modid);
