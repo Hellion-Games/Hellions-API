@@ -15,24 +15,24 @@ public class HellionsAPILootModifierRegistry {
     private final Map<ResourceLocation, LootModifierDataHolder> LOOT_MODIFIER_REGISTRY = new HashMap<>();
 
     /*
-     * public static final HellionsAPILootModifierRegistry LOOT_MODIFIER_MODULE = new HellionsAPILootModifierRegistry("examplemod");
-     *
-     * public static final LootModifierDataHolder EXAMPLE_LOOT_MODIFIER = LOOT_MODIFIER_MODULE.register(
-     *     "example_loot_modifier",
-     *     ResourceLocation.fromNamespaceAndPath("minecraft", "chests/simple_dungeon"),
-     *     () -> LootItem.lootTableItem(Items.DIAMOND)
-     *         .when(LootItemRandomChanceCondition.randomChance(0.5f))
-     * );
-     *
-     * The user must also create a JSON file at:
-     * data/<modid>/neoforge/loot_modifiers/<modifier_name>.json
-     *
-     * {
-     *     "type": "hellionsapi:hellions_loot_modifier",
-     *     "conditions": [],
-     *     "id": "<modid>:<registered_name (in this case, "example_loot_modifier")>"
-     * }
-     *
+       public static final HellionsAPILootModifierRegistry LOOT_MODIFIER_MODULE = new HellionsAPILootModifierRegistry("examplemod");
+
+       public static final LootModifierDataHolder EXAMPLE_LOOT_MODIFIER = LOOT_MODIFIER_MODULE.register(
+           "example_loot_modifier",
+           ResourceLocation.fromNamespaceAndPath("minecraft", "chests/simple_dungeon"),
+           () -> LootItem.lootTableItem(Items.DIAMOND)
+               .when(LootItemRandomChanceCondition.randomChance(0.5f))
+       );
+
+       The user must also create a JSON file at:
+       data/<modid>/neoforge/loot_modifiers/<modifier_name>.json
+
+       {
+           "type": "hellionsapi:hellions_loot_modifier",
+           "conditions": [],
+           "id": "<modid>:<registered_name (in this case, "example_loot_modifier")>"
+       }
+
      */
 
     public HellionsAPILootModifierRegistry(String modid) {
