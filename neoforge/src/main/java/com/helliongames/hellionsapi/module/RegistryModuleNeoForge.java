@@ -16,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.Map;
@@ -97,6 +98,13 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
+        } else if (event.getRegistry().equals(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS)) {
+            event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, helper ->
+                    helper.register(
+                            ResourceLocation.fromNamespaceAndPath("hellionsapi", "hellions_loot_modifier"),
+                            HellionsLootModifier.CODEC
+                    )
+            );
         }
     }
 

@@ -12,5 +12,6 @@ public class FabricRegistryHelper implements IRegistryHelper {
         EffectModuleFabric.registerEffects(modid);
         SoundModuleFabric.registerSounds(modid);
         ParticleModuleFabric.registerParticles(modid);
+        LootModifierModuleFabric.registerLootModifiers(modid);
     }
 }
