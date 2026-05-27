@@ -3,8 +3,6 @@ package com.helliongames.hellionsapi.module;
 import com.helliongames.hellionsapi.registration.holders.*;
 import com.helliongames.hellionsapi.registration.registries.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -27,7 +25,7 @@ public class RegistryModuleNeoForge {
 
     @SubscribeEvent
     public static void registerValues(RegisterEvent event) {
-        if (event.getRegistry().equals(BuiltInRegistries.ENTITY_TYPE)) {
+        if (event.getRegistry().equals(Registries.ENTITY_TYPE)) {
             for (Map.Entry<String, HellionsAPIEntityRegistry> module : HellionsAPIEntityRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getValue().getEntityTypeRegistry().entrySet()) {
                     // Register entity type
@@ -36,7 +34,7 @@ public class RegistryModuleNeoForge {
                     );
                 }
             }
-        } else if (event.getRegistry().equals(BuiltInRegistries.ITEM)) {
+        } else if (event.getRegistry().equals(Registries.ITEM)) {
             for (Map.Entry<String, HellionsAPIItemRegistry> module : HellionsAPIItemRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getValue().getItemRegistry().entrySet()) {
                     // Register item
@@ -45,7 +43,7 @@ public class RegistryModuleNeoForge {
                     );
                 }
             }
-        } else if (event.getRegistry().equals(BuiltInRegistries.BLOCK)) {
+        } else if (event.getRegistry().equals(Registries.BLOCK)) {
             for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getValue().getBlockRegistry().entrySet()) {
                     // Register block
@@ -61,11 +59,11 @@ public class RegistryModuleNeoForge {
                     }
                 }
             }
-        } else if (event.getRegistry().equals(BuiltInRegistries.MOB_EFFECT)) {
+        } else if (event.getRegistry().equals(Registries.MOB_EFFECT)) {
             for (Map.Entry<String, HellionsAPIEffectRegistry> module : HellionsAPIEffectRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getValue().getEffectRegistry().entrySet()) {
                     // Register effect
-                    Registry.register(BuiltInRegistries.MOB_EFFECT, entry.getKey(), entry.getValue().get());
+                    event.register(Registries.MOB_EFFECT, helper -> helper.register(entry.getKey(), entry.getValue().get()));
 
                     if (entry.getValue().hasPotion()) {
                         String id = entry.getKey().getPath();
@@ -80,7 +78,7 @@ public class RegistryModuleNeoForge {
                     }
                 }
             }
-        } else if (event.getRegistry().equals(BuiltInRegistries.SOUND_EVENT)) {
+        } else if (event.getRegistry().equals(Registries.SOUND_EVENT)) {
             for (Map.Entry<String, HellionsAPISoundRegistry> module : HellionsAPISoundRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, SoundDataHolder> entry : module.getValue().getSoundRegistry().entrySet()) {
                     // Register sound
@@ -88,9 +86,17 @@ public class RegistryModuleNeoForge {
                             SoundEvent.createFixedRangeEvent(entry.getKey(), entry.getValue().getRange()) :
                             SoundEvent.createVariableRangeEvent(entry.getKey());
 
-                    Registry.register(BuiltInRegistries.SOUND_EVENT, entry.getKey(), soundEvent);
+                    event.register(Registries.SOUND_EVENT, helper -> helper.register(entry.getKey(), soundEvent));
                 }
             }
+        } else if (event.getRegistry().equals(Registries.PARTICLE_TYPE)) {
+            event.register(Registries.PARTICLE_TYPE, helper -> {
+                for (HellionsAPIParticleRegistry module : HellionsAPIParticleRegistry.getModules().values()) {
+                    for (Map.Entry<ResourceLocation, ParticleDataHolder<?>> entry : module.getParticleRegistry().entrySet()) {
+                        helper.register(entry.getKey(), entry.getValue().get());
+                    }
+                }
+            });
         }
     }
 
