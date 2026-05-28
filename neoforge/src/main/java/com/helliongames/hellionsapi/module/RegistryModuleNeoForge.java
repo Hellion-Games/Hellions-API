@@ -113,6 +113,14 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
+        } else if (event.getRegistry().equals(Registries.MENU)) {
+            event.register(Registries.MENU, helper -> {
+                for (HellionsAPIMenuRegistry module : HellionsAPIMenuRegistry.getModules().values()) {
+                    for (Map.Entry<ResourceLocation, MenuDataHolder<?>> entry : module.getMenuRegistry().entrySet()) {
+                        helper.register(entry.getKey(), entry.getValue().get());
+                    }
+                }
+            });
         }
     }
 

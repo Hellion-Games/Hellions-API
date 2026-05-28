@@ -1,4 +1,4 @@
-package com.helliongames.hellionsapi.registration.registries;
+package com.helliongames.hellionsapi.registration.registries.client;
 
 import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

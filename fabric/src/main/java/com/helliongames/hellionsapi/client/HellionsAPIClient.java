@@ -1,11 +1,13 @@
 package com.helliongames.hellionsapi.client;
 
 import com.helliongames.hellionsapi.registration.holders.ParticleDataHolder;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRendererRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIParticleRegistry;
+import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIEntityRendererRegistry;
+import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIMenuScreenRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.particles.ParticleOptions;
 
 public class HellionsAPIClient implements ClientModInitializer {
@@ -14,6 +16,7 @@ public class HellionsAPIClient implements ClientModInitializer {
         HellionsAPICommonClient.init();
         registerEntityRenderers();
         registerParticleFactories();
+        registerMenuScreens();
     }
 
     private void registerEntityRenderers() {
@@ -30,5 +33,11 @@ public class HellionsAPIClient implements ClientModInitializer {
 
     private <T extends ParticleOptions> void registerParticleFactory(ParticleDataHolder<T> holder) {
         ParticleFactoryRegistry.getInstance().register(holder.get(), sprites -> holder.getFactory().apply(sprites));
+    }
+
+    private void registerMenuScreens() {
+        HellionsAPIMenuScreenRegistry.forEachEntry(entry ->
+                MenuScreens.register(entry.getHolder().get(), (menu, inventory, title) -> entry.getScreenConstructor().create(menu, inventory, title))
+        );
     }
 }

@@ -14,5 +14,6 @@ public class FabricRegistryHelper implements IRegistryHelper {
         SoundModuleFabric.registerSounds(modid);
         ParticleModuleFabric.registerParticles(modid);
         LootModifierModuleFabric.registerLootModifiers(modid);
+        MenuModuleFabric.registerMenus(modid);
     }
 }

@@ -1,6 +1,6 @@
 package com.helliongames.hellionsapi.client;
 
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRendererRegistry;
+import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIEntityRendererRegistry;
 
 public class HellionsAPICommonClient {
     public static void init() {
