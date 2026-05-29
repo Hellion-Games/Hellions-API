@@ -121,6 +121,13 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
+        } else if (event.getRegistry().equals(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS)) {
+            event.register(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, helper ->
+                    helper.register(
+                            ResourceLocation.fromNamespaceAndPath("hellionsapi", "hellions_biome_modifier"),
+                            HellionsBiomeModifier.CODEC
+                    )
+            );
         }
     }
 

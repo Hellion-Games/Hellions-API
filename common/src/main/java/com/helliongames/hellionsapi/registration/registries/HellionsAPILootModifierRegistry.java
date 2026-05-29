@@ -24,7 +24,7 @@ public class HellionsAPILootModifierRegistry {
                .when(LootItemRandomChanceCondition.randomChance(0.5f))
        );
 
-       The user must also create a JSON file at:
+       For NeoForge, the user must also create a JSON file at:
        data/<modid>/neoforge/loot_modifiers/<modifier_name>.json
 
        {
