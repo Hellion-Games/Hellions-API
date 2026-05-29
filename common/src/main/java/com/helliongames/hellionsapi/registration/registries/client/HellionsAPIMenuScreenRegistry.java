@@ -2,6 +2,7 @@ package com.helliongames.hellionsapi.registration.registries.client;
 
 import com.helliongames.hellionsapi.registration.holders.MenuDataHolder;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -13,13 +14,13 @@ import java.util.function.Consumer;
 public class HellionsAPIMenuScreenRegistry {
     private static final List<ScreenEntry<?, ?>> SCREEN_REGISTRY = new ArrayList<>();
 
-    public static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M>> void register(
+    public static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void register(
             MenuDataHolder<M> holder,
             ScreenConstructor<M, S> screenConstructor) {
         SCREEN_REGISTRY.add(new ScreenEntry<>(holder, screenConstructor));
     }
 
-    public static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M>> void forEachEntry(
+    public static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void forEachEntry(
             Consumer<ScreenEntry<M, S>> consumer) {
         for (ScreenEntry<?, ?> entry : SCREEN_REGISTRY) {
             @SuppressWarnings("unchecked")
@@ -28,7 +29,7 @@ public class HellionsAPIMenuScreenRegistry {
         }
     }
 
-    public static final class ScreenEntry<M extends AbstractContainerMenu, S extends AbstractContainerScreen<M>> {
+    public static final class ScreenEntry<M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> {
         private final MenuDataHolder<M> holder;
         private final ScreenConstructor<M, S> screenConstructor;
 
@@ -42,7 +43,7 @@ public class HellionsAPIMenuScreenRegistry {
     }
 
     @FunctionalInterface
-    public interface ScreenConstructor<M extends AbstractContainerMenu, S extends AbstractContainerScreen<M>> {
+    public interface ScreenConstructor<M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> {
         S create(M menu, Inventory inventory, Component title);
     }
 }

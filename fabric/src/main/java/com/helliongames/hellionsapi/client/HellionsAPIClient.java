@@ -8,7 +8,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class HellionsAPIClient implements ClientModInitializer {
     @Override
@@ -36,8 +39,12 @@ public class HellionsAPIClient implements ClientModInitializer {
     }
 
     private void registerMenuScreens() {
-        HellionsAPIMenuScreenRegistry.forEachEntry(entry ->
-                MenuScreens.register(entry.getHolder().get(), (menu, inventory, title) -> entry.getScreenConstructor().create(menu, inventory, title))
-        );
+        HellionsAPIMenuScreenRegistry.forEachEntry(this::registerMenuScreen);
+    }
+
+    private <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {
+        @SuppressWarnings("unchecked")
+        MenuScreens.ScreenConstructor<M, S> constructor = (MenuScreens.ScreenConstructor<M, S>) entry.getScreenConstructor();
+        MenuScreens.register(entry.getHolder().get(), constructor);
     }
 }
