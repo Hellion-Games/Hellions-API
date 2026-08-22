@@ -5,7 +5,6 @@ import com.helliongames.hellionsapi.registration.registries.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -83,11 +82,7 @@ public class RegistryModuleNeoForge {
             for (Map.Entry<String, HellionsAPISoundRegistry> module : HellionsAPISoundRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, SoundDataHolder> entry : module.getValue().getSoundRegistry().entrySet()) {
                     // Register sound
-                    SoundEvent soundEvent = entry.getValue().hasRange() ?
-                            SoundEvent.createFixedRangeEvent(entry.getKey(), entry.getValue().getRange()) :
-                            SoundEvent.createVariableRangeEvent(entry.getKey());
-
-                    event.register(Registries.SOUND_EVENT, helper -> helper.register(entry.getKey(), soundEvent));
+                    event.register(Registries.SOUND_EVENT, helper -> helper.register(entry.getKey(), entry.getValue().get()));
                 }
             }
         } else if (event.getRegistry().equals(Registries.PARTICLE_TYPE)) {

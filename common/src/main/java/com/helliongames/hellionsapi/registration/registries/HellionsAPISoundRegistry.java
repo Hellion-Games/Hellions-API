@@ -28,6 +28,8 @@ public class HellionsAPISoundRegistry {
 
     public <T extends SoundEvent> SoundDataHolder register(String name, SoundDataHolder soundDataHolder) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(this.modid, name);
+        soundDataHolder.setResourceLocation(id);
+
         this.SOUND_REGISTRY.put(id, soundDataHolder);
         return soundDataHolder;
     }
