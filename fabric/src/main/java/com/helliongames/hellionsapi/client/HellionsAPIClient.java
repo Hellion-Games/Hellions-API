@@ -43,8 +43,6 @@ public class HellionsAPIClient implements ClientModInitializer {
     }
 
     private <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {
-        @SuppressWarnings("unchecked")
-        MenuScreens.ScreenConstructor<M, S> constructor = (MenuScreens.ScreenConstructor<M, S>) entry.getScreenConstructor();
-        MenuScreens.register(entry.getHolder().get(), constructor);
+        MenuScreens.register(entry.getHolder().get(), entry.getScreenConstructor()::create);
     }
 }
