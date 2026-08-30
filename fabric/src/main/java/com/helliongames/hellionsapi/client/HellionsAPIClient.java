@@ -25,11 +25,14 @@ public class HellionsAPIClient implements ClientModInitializer {
     }
 
     private static void registerEntityRenderers(String modid) {
-        HellionsAPIEntityRendererRegistry.getModule(modid).forEachEntry(entry -> EntityRendererRegistry.register(entry.getHolder().get(), entry.getProvider()));
+        HellionsAPIEntityRendererRegistry module = HellionsAPIEntityRendererRegistry.getModule(modid);
+        if (module == null) return;
+        module.forEachEntry(entry -> EntityRendererRegistry.register(entry.getHolder().get(), entry.getProvider()));
     }
 
     private static void registerParticleFactories(String modid) {
         HellionsAPIParticleRegistry module = HellionsAPIParticleRegistry.getModule(modid);
+        if (module == null) return;
         for (ParticleDataHolder<?> holder : module.getParticleRegistry().values()) {
             registerParticleFactory(holder);
         }
@@ -40,7 +43,9 @@ public class HellionsAPIClient implements ClientModInitializer {
     }
 
     private static void registerMenuScreens(String modid) {
-        HellionsAPIMenuScreenRegistry.getModule(modid).forEachEntry(HellionsAPIClient::registerMenuScreen);
+        HellionsAPIMenuScreenRegistry module = HellionsAPIMenuScreenRegistry.getModule(modid);
+        if (module == null) return;
+        module.forEachEntry(HellionsAPIClient::registerMenuScreen);
     }
 
     private static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {

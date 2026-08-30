@@ -8,6 +8,7 @@ import com.helliongames.hellionsapi.registration.holders.MenuDataHolder;
 import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
 import com.helliongames.hellionsapi.registration.holders.ParticleDataHolder;
 import com.helliongames.hellionsapi.registration.holders.SoundDataHolder;
+import com.helliongames.hellionsapi.registration.holders.SpawnPlacementDataHolder;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIArmorMaterialRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIBlockRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIDataComponentTypeRegistry;
@@ -17,6 +18,7 @@ import com.helliongames.hellionsapi.registration.registries.HellionsAPIItemRegis
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIMenuRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPIParticleRegistry;
 import com.helliongames.hellionsapi.registration.registries.HellionsAPISoundRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPISpawnPlacementRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,12 +28,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.alchemy.Potion;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -110,7 +115,7 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
-        } else if (event.getRegistry().equals(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS)) {
+        } else if (event.getRegistry().equals(NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS)) {
             event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, helper ->
                     helper.register(
                             ResourceLocation.fromNamespaceAndPath("hellionsapi", "hellions_loot_modifier"),
@@ -133,7 +138,7 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
-        } else if (event.getRegistry().equals(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS)) {
+        } else if (event.getRegistry().equals(NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS)) {
             event.register(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, helper ->
                     helper.register(
                             ResourceLocation.fromNamespaceAndPath("hellionsapi", "hellions_biome_modifier"),
@@ -164,6 +169,15 @@ public class RegistryModuleNeoForge {
                         .add(NeoForgeMod.NAMETAG_DISTANCE);
 
                 event.put((EntityType<? extends LivingEntity>) entry.getValue().get(), builder.build());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static <T extends Mob> void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        for (Map.Entry<String, HellionsAPISpawnPlacementRegistry> module : HellionsAPISpawnPlacementRegistry.getModules().entrySet()) {
+            for (SpawnPlacementDataHolder<?> holder : module.getValue().getSpawnPlacementRegistry()) {
+                event.register((EntityType<T>) holder.entityType(), holder.spawnPlacementType(), holder.heightmapType(), (SpawnPlacements.SpawnPredicate<T>) holder.spawnPredicate(), RegisterSpawnPlacementsEvent.Operation.OR);
             }
         }
     }

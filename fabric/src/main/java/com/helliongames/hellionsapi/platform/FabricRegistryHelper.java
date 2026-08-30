@@ -11,10 +11,12 @@ public class FabricRegistryHelper implements IRegistryHelper {
         ItemModuleFabric.registerItems(modid);
         EntityTypeModuleFabric.registerEntities(modid);
         EffectModuleFabric.registerEffects(modid);
+        DataComponentTypeModuleFabric.registerDataComponentTypes(modid);
         SoundModuleFabric.registerSounds(modid);
         ParticleModuleFabric.registerParticles(modid);
         LootModifierModuleFabric.registerLootModifiers(modid);
         MenuModuleFabric.registerMenus(modid);
+        SpawnPlacementModuleFabric.registerSpawnPlacements(modid);
         BiomeModifierModuleFabric.registerBiomeModifiers(modid);
     }
 }
