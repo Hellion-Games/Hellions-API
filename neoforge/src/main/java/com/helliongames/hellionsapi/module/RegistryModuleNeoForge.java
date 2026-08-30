@@ -47,7 +47,7 @@ public class RegistryModuleNeoForge {
 
     @SubscribeEvent
     public static void registerValues(RegisterEvent event) {
-        if (event.getRegistry().equals(Registries.ENTITY_TYPE)) {
+        if (event.getRegistry().equals(BuiltInRegistries.ENTITY_TYPE)) {
             for (Map.Entry<String, HellionsAPIEntityRegistry> module : HellionsAPIEntityRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, EntityTypeDataHolder<? extends Entity>> entry : module.getValue().getEntityTypeRegistry().entrySet()) {
                     // Register entity type
@@ -56,7 +56,7 @@ public class RegistryModuleNeoForge {
                     );
                 }
             }
-        } else if (event.getRegistry().equals(Registries.ITEM)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.ITEM)) {
             for (Map.Entry<String, HellionsAPIItemRegistry> module : HellionsAPIItemRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, ItemDataHolder<?>> entry : module.getValue().getItemRegistry().entrySet()) {
                     // Register item
@@ -65,7 +65,7 @@ public class RegistryModuleNeoForge {
                     );
                 }
             }
-        } else if (event.getRegistry().equals(Registries.BLOCK)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.BLOCK)) {
             for (Map.Entry<String, HellionsAPIBlockRegistry> module : HellionsAPIBlockRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, BlockDataHolder<?>> entry : module.getValue().getBlockRegistry().entrySet()) {
                     // Register block
@@ -81,7 +81,7 @@ public class RegistryModuleNeoForge {
                     }
                 }
             }
-        } else if (event.getRegistry().equals(Registries.MOB_EFFECT)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.MOB_EFFECT)) {
             for (Map.Entry<String, HellionsAPIEffectRegistry> module : HellionsAPIEffectRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, MobEffectDataHolder<?>> entry : module.getValue().getEffectRegistry().entrySet()) {
                     // Register effect
@@ -100,14 +100,14 @@ public class RegistryModuleNeoForge {
                     }
                 }
             }
-        } else if (event.getRegistry().equals(Registries.SOUND_EVENT)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.SOUND_EVENT)) {
             for (Map.Entry<String, HellionsAPISoundRegistry> module : HellionsAPISoundRegistry.getModules().entrySet()) {
                 for (Map.Entry<ResourceLocation, SoundDataHolder> entry : module.getValue().getSoundRegistry().entrySet()) {
                     // Register sound
                     event.register(Registries.SOUND_EVENT, helper -> helper.register(entry.getKey(), entry.getValue().get()));
                 }
             }
-        } else if (event.getRegistry().equals(Registries.PARTICLE_TYPE)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.PARTICLE_TYPE)) {
             event.register(Registries.PARTICLE_TYPE, helper -> {
                 for (HellionsAPIParticleRegistry module : HellionsAPIParticleRegistry.getModules().values()) {
                     for (Map.Entry<ResourceLocation, ParticleDataHolder<?>> entry : module.getParticleRegistry().entrySet()) {
@@ -122,7 +122,7 @@ public class RegistryModuleNeoForge {
                             HellionsLootModifier.CODEC
                     )
             );
-        } else if (event.getRegistry().equals(Registries.ARMOR_MATERIAL)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.ARMOR_MATERIAL)) {
             event.register(Registries.ARMOR_MATERIAL, helper -> {
                 for (HellionsAPIArmorMaterialRegistry module : HellionsAPIArmorMaterialRegistry.getModules().values()) {
                     for (Map.Entry<ResourceLocation, ArmorMaterialDataHolder> entry : module.getArmorMaterialRegistry().entrySet()) {
@@ -130,7 +130,7 @@ public class RegistryModuleNeoForge {
                     }
                 }
             });
-        } else if (event.getRegistry().equals(Registries.MENU)) {
+        } else if (event.getRegistry().equals(BuiltInRegistries.MENU)) {
             event.register(Registries.MENU, helper -> {
                 for (HellionsAPIMenuRegistry module : HellionsAPIMenuRegistry.getModules().values()) {
                     for (Map.Entry<ResourceLocation, MenuDataHolder<?>> entry : module.getMenuRegistry().entrySet()) {
