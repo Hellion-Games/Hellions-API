@@ -16,33 +16,34 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 public class HellionsAPIClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        HellionsAPICommonClient.init();
-        registerEntityRenderers();
-        registerParticleFactories();
-        registerMenuScreens();
     }
 
-    private void registerEntityRenderers() {
-        HellionsAPIEntityRendererRegistry.forEachEntry(entry -> EntityRendererRegistry.register(entry.getHolder().get(), entry.getProvider()));
+    public static void init(String modid) {
+        registerEntityRenderers(modid);
+        registerParticleFactories(modid);
+        registerMenuScreens(modid);
     }
 
-    private void registerParticleFactories() {
-        for (HellionsAPIParticleRegistry module : HellionsAPIParticleRegistry.getModules().values()) {
-            for (ParticleDataHolder<?> holder : module.getParticleRegistry().values()) {
-                registerParticleFactory(holder);
-            }
+    private static void registerEntityRenderers(String modid) {
+        HellionsAPIEntityRendererRegistry.getModule(modid).forEachEntry(entry -> EntityRendererRegistry.register(entry.getHolder().get(), entry.getProvider()));
+    }
+
+    private static void registerParticleFactories(String modid) {
+        HellionsAPIParticleRegistry module = HellionsAPIParticleRegistry.getModule(modid);
+        for (ParticleDataHolder<?> holder : module.getParticleRegistry().values()) {
+            registerParticleFactory(holder);
         }
     }
 
-    private <T extends ParticleOptions> void registerParticleFactory(ParticleDataHolder<T> holder) {
+    private static <T extends ParticleOptions> void registerParticleFactory(ParticleDataHolder<T> holder) {
         ParticleFactoryRegistry.getInstance().register(holder.get(), sprites -> holder.getFactory().apply(sprites));
     }
 
-    private void registerMenuScreens() {
-        HellionsAPIMenuScreenRegistry.forEachEntry(this::registerMenuScreen);
+    private static void registerMenuScreens(String modid) {
+        HellionsAPIMenuScreenRegistry.getModule(modid).forEachEntry(HellionsAPIClient::registerMenuScreen);
     }
 
-    private <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {
+    private static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {
         MenuScreens.register(entry.getHolder().get(), entry.getScreenConstructor()::create);
     }
 }

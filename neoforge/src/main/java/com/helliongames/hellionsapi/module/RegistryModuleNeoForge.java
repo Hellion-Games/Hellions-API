@@ -1,8 +1,25 @@
 package com.helliongames.hellionsapi.module;
 
-import com.helliongames.hellionsapi.registration.holders.*;
-import com.helliongames.hellionsapi.registration.registries.*;
+import com.helliongames.hellionsapi.registration.holders.ArmorMaterialDataHolder;
+import com.helliongames.hellionsapi.registration.holders.BlockDataHolder;
+import com.helliongames.hellionsapi.registration.holders.EntityTypeDataHolder;
+import com.helliongames.hellionsapi.registration.holders.ItemDataHolder;
+import com.helliongames.hellionsapi.registration.holders.MenuDataHolder;
+import com.helliongames.hellionsapi.registration.holders.MobEffectDataHolder;
+import com.helliongames.hellionsapi.registration.holders.ParticleDataHolder;
+import com.helliongames.hellionsapi.registration.holders.SoundDataHolder;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIArmorMaterialRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIBlockRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIDataComponentTypeRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIEffectRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIEntityRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIItemRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIMenuRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPIParticleRegistry;
+import com.helliongames.hellionsapi.registration.registries.HellionsAPISoundRegistry;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -123,6 +140,14 @@ public class RegistryModuleNeoForge {
                             HellionsBiomeModifier.CODEC
                     )
             );
+        } else if (event.getRegistry().equals(BuiltInRegistries.DATA_COMPONENT_TYPE)) {
+            event.register(Registries.DATA_COMPONENT_TYPE, helper -> {
+                for (HellionsAPIDataComponentTypeRegistry module : HellionsAPIDataComponentTypeRegistry.getModules().values()) {
+                    for (Map.Entry<ResourceLocation, DataComponentType<?>> entry : module.getDataComponentTypeRegistry().entrySet()) {
+                        helper.register(entry.getKey(), entry.getValue());
+                    }
+                }
+            });
         }
     }
 

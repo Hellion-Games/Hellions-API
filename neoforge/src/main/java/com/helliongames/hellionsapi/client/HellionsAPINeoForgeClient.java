@@ -17,8 +17,6 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 public class HellionsAPINeoForgeClient {
     public static void init(IEventBus modEventBus) {
-        HellionsAPICommonClient.init();
-
         modEventBus.addListener(HellionsAPINeoForgeClient::clientSetup);
         modEventBus.addListener(HellionsAPINeoForgeClient::registerEntityRenderers);
         modEventBus.addListener(HellionsAPINeoForgeClient::registerParticleFactories);
@@ -29,7 +27,9 @@ public class HellionsAPINeoForgeClient {
     }
 
     private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        HellionsAPIEntityRendererRegistry.forEachEntry(entry -> event.registerEntityRenderer(entry.getHolder().get(), entry.getProvider()));
+        for (HellionsAPIEntityRendererRegistry module : HellionsAPIEntityRendererRegistry.getModules().values()) {
+            module.forEachEntry(entry -> event.registerEntityRenderer(entry.getHolder().get(), entry.getProvider()));
+        }
     }
 
     private static void registerParticleFactories(RegisterParticleProvidersEvent event) {
@@ -45,7 +45,9 @@ public class HellionsAPINeoForgeClient {
     }
 
     private static void registerMenuScreens(RegisterMenuScreensEvent event) {
-        HellionsAPIMenuScreenRegistry.forEachEntry(entry -> registerMenuScreen(event, entry));
+        for (HellionsAPIMenuScreenRegistry module : HellionsAPIMenuScreenRegistry.getModules().values()) {
+            module.forEachEntry(entry -> registerMenuScreen(event, entry));
+        }
     }
 
     private static <M extends AbstractContainerMenu, S extends AbstractContainerScreen<M> & MenuAccess<M>> void registerMenuScreen(RegisterMenuScreensEvent event, HellionsAPIMenuScreenRegistry.ScreenEntry<M, S> entry) {
