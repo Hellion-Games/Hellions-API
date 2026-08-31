@@ -1,11 +1,13 @@
 package com.helliongames.hellionsapi.client;
 
 import com.helliongames.hellionsapi.registration.holders.ParticleDataHolder;
-import com.helliongames.hellionsapi.registration.registries.HellionsAPIParticleRegistry;
 import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIEntityRendererRegistry;
 import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIMenuScreenRegistry;
+import com.helliongames.hellionsapi.registration.registries.client.HellionsAPIParticleFactoryRegistry;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.bus.api.IEventBus;
@@ -13,6 +15,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+
+import java.util.Map;
+import java.util.function.Function;
 
 public class HellionsAPINeoForgeClient {
     public static void init(IEventBus modEventBus) {
@@ -32,15 +37,19 @@ public class HellionsAPINeoForgeClient {
     }
 
     private static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-        for (HellionsAPIParticleRegistry module : HellionsAPIParticleRegistry.getModules().values()) {
-            for (ParticleDataHolder<?> holder : module.getParticleRegistry().values()) {
-                registerParticleFactory(event, holder);
+        for (HellionsAPIParticleFactoryRegistry module : HellionsAPIParticleFactoryRegistry.getModules().values()) {
+            for (Map.Entry<ParticleDataHolder<?>, Function<SpriteSet, ? extends ParticleProvider<? extends ParticleOptions>>> entry : module.getParticleRegistry().entrySet()) {
+                registerParticleFactory(event, entry);
             }
         }
     }
 
-    private static <T extends ParticleOptions> void registerParticleFactory(RegisterParticleProvidersEvent event, ParticleDataHolder<T> holder) {
-        event.registerSpriteSet(holder.get(), sprites -> holder.getFactory().apply(sprites));
+    @SuppressWarnings("unchecked")
+    private static <T extends ParticleOptions> void registerParticleFactory(RegisterParticleProvidersEvent event, Map.Entry<ParticleDataHolder<?>, Function<SpriteSet, ? extends ParticleProvider<? extends ParticleOptions>>> entry) {
+        ParticleDataHolder<T> holder = (ParticleDataHolder<T>) entry.getKey();
+        Function<SpriteSet, ParticleProvider<T>> factory = (Function<SpriteSet, ParticleProvider<T>>) entry.getValue();
+
+        event.registerSpriteSet(holder.get(), factory::apply);
     }
 
     private static void registerMenuScreens(RegisterMenuScreensEvent event) {

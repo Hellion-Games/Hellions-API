@@ -1,29 +1,20 @@
 package com.helliongames.hellionsapi.registration.holders;
 
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ParticleDataHolder<T extends ParticleOptions> {
     private ParticleType<T> cachedEntry;
     private final Supplier<ParticleType<T>> entrySupplier;
-    private final Function<SpriteSet, ParticleProvider<T>> factory;
 
-    public ParticleDataHolder(Supplier<ParticleType<T>> entrySupplier, Function<SpriteSet, ParticleProvider<T>>  factory) {
+    public ParticleDataHolder(Supplier<ParticleType<T>> entrySupplier) {
         this.entrySupplier = entrySupplier;
-        this.factory = factory;
     }
 
-    public static <I extends ParticleOptions> ParticleDataHolder<I> of(Supplier<ParticleType<I>> particleSupplier, Function<SpriteSet, ParticleProvider<I>>  particleFactory) {
-        return new ParticleDataHolder<>(particleSupplier, particleFactory);
-    }
-
-    public Function<SpriteSet, ParticleProvider<T>> getFactory() {
-        return factory;
+    public static <I extends ParticleOptions> ParticleDataHolder<I> of(Supplier<ParticleType<I>> particleSupplier) {
+        return new ParticleDataHolder<>(particleSupplier);
     }
 
     /**
